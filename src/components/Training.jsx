@@ -144,7 +144,9 @@ export default function Training() {
                 date: '',
                 duration: '',
                 activity: '',
+                customer: '',
             })
+            setCustomer('')
             setDate(constructNow())
             fetchTrainings();
         } catch (e) {
