@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider, HashRouter } from 'react-router-dom';
 import App from './App.jsx'
 import './index.css'
 
@@ -10,7 +10,7 @@ import Training from './components/Training';
 import CalendarView from './components/CalendarView.jsx';
 import Charts from './components/Charts.jsx'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <App />,
