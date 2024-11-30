@@ -39,6 +39,14 @@ export default function Training() {
             sort: 'asc',
             minWidth: 50,
             maxWidth: 150,
+            filter: 'agDateColumnFilter',
+            valueGetter: params => {
+                if (params.data.date != null){
+                    return parseISO(params.data.date, new Date())
+                } else {
+                    return ('')
+                }
+            },
             cellRenderer: params => {
                 if (params.data.date != null) {
                     const gridDate = parseISO(params.data.date, new Date());
