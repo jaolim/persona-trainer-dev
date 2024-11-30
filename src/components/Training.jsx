@@ -213,7 +213,7 @@ export default function Training() {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DateTimePicker
                             name="date"
-                            format="dd-MM-yyyy hh:mm"
+                            format="dd-MM-yyyy HH:mm"
                             ampm={false}
                             onChange={(date) => setDate(date)}
                             value={date}
