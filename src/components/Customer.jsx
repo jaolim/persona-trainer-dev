@@ -11,8 +11,6 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 
 export default function Customer() {
-    const gridRef = useRef();
-
     const [customers, setCustomers] = useState([]);
     const [open, setOpen] = useState(false);
     const [customer, setCustomer] = useState({
@@ -24,11 +22,7 @@ export default function Customer() {
         email: '',
         phone: ''
     })
-
-    const [exportParams, setExportParams] = useState({
-        columnKeys: ['firstname', 'lastname', 'streetaddress', 'postcode', 'city', 'email', 'phone']
-    })
-    
+//Grid definitions
     const [columnDefs, setColumnDefs] = useState([
         { field: 'firstname', flex: 1.5, minWidth: 50 },
         { field: 'lastname', sort: 'asc', flex: 1.5, minWidth: 50 },
@@ -70,23 +64,13 @@ export default function Customer() {
         type: 'filCellContents',
     };
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    }
+    const [exportParams, setExportParams] = useState({
+        columnKeys: ['firstname', 'lastname', 'streetaddress', 'postcode', 'city', 'email', 'phone']
+    })
 
-    const handleClose = () => {
-        setOpen(false);
-    }
+    const gridRef = useRef();
 
-    const handleChange = event => {
-        setCustomer({ ...customer, [event.target.name]: event.target.value });
-    }
-
-    const handleSave = () => {
-        addCustomer(customer)
-        setOpen(false);
-    }
-
+//API calls
     const fetchCustomers = async () => {
         try {
             const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers')
@@ -147,7 +131,24 @@ export default function Customer() {
             console.error(e);
         }
     }
+//handlers
+    const handleClickOpen = () => {
+        setOpen(true);
+    }
 
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleChange = event => {
+        setCustomer({ ...customer, [event.target.name]: event.target.value });
+    }
+
+    const handleSave = () => {
+        addCustomer(customer)
+        setOpen(false);
+    }
+//useEffect
     useEffect(() => {
         fetchCustomers()
     }, [])

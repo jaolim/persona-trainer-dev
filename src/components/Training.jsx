@@ -14,25 +14,18 @@ import "ag-grid-community/styles/ag-theme-material.css";
 
 export default function Training() {
 
-    const gridRef = useRef();
     const [customer, setCustomer] = useState('')
-
-    const handleSetCustomer = (event) => {
-        setCustomer(event.target.value);
-    }
-
     const [customers, setCustomers] = useState([]);
     const [trainings, setTrainings] = useState([]);
     const [open, setOpen] = useState(false);
     const [date, setDate] = useState(constructNow())
-
     const [training, setTraining] = useState({
         date: '',
         duration: '',
         activity: '',
         customer: '',
     })
-
+//ag-grid definitions
     const [columnDefs, setColumnDefs] = useState([
         {
             field: 'date',
@@ -88,6 +81,8 @@ export default function Training() {
             cellRenderer: params => <Button color="error" onClick={() => deleteTraining(params.data.id)}>Delete</Button>
         }
     ]);
+    
+    const gridRef = useRef();
 
     const defaultColDef = {
         sortable: true,
@@ -101,33 +96,16 @@ export default function Training() {
     const [exportParams, setExportParams] = useState({
         columnKeys: ['date', 'duration', 'activity', 'customer']
     })
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    }
-
-    const handleClose = () => {
-        setOpen(false);
-    }
-
-    const handleChange = event => {
-        setTraining({ ...training, [event.target.name]: event.target.value });
-    }
-
-    const handleSave = () => {
-        addTraining()
-        setOpen(false);
-    }
-
+// API calls
     const fetchCustomers = async () => {
         try {
             const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers')
             const data = await response.json();
-            const mapped = data._embedded.customers.map((customer) => {
+            const mapped = data._embedded.customers.map((customer) => { //iterating received data to add combined first+last name for easier sorting
                 customer.name = `${customer.lastname} ${customer.firstname}`
                 return customer
             })
-            setCustomers(mapped.sort((a, b) => a.name.localeCompare(b.name)));
+            setCustomers(mapped.sort((a, b) => a.name.localeCompare(b.name))); //alphabetically sorting the data based on names
         } catch (e) {
             console.error(e);
         }
@@ -142,7 +120,6 @@ export default function Training() {
             console.error(e);
         }
     };
-
 
     const addTraining = async () => {
         const train = {
@@ -190,12 +167,32 @@ export default function Training() {
             console.error(e);
         }
     }
-
     const fetcher = () => {
         fetchCustomers();
         fetchTrainings();
     }
+//handlers
+    const handleSetCustomer = (event) => {
+        setCustomer(event.target.value);
+    }
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleChange = event => {
+        setTraining({ ...training, [event.target.name]: event.target.value });
+    }
+
+    const handleSave = () => {
+        addTraining()
+        setOpen(false);
+    }
+//useEffects
     useEffect(() => {
         setTraining({ ...training, customer })
     }, [customer])

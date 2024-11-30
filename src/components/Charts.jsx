@@ -10,7 +10,7 @@ export default function Charts() {
         try {
             const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/gettrainings')
             const data = await response.json()
-            const grouped = chain(data)
+            const grouped = chain(data) //3 iterations on received data: group by "activity" -> assign key: value pairs to those groups -> add "minutes" key and calculate its value by checking activity values on objects inside ach actvity group
             .groupBy('activity')
             .map((value, key) => ({ activity: key, sessions: value }))
             .value()
@@ -18,7 +18,7 @@ export default function Charts() {
                 type.minutes = sumBy(type.sessions, (session) => session.duration)
                 return type
             })
-            setTrainings(grouped.sort((a, b) => a.activity.localeCompare(b.activity)))
+            setTrainings(grouped.sort((a, b) => a.activity.localeCompare(b.activity))) //assigning data sorted alphabetically by activity to trainings
         } catch (e) {
             console.error(e);
         }

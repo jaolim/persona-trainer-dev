@@ -23,7 +23,6 @@ export default function ExportCsv({ gridRef, exportParams }) {
         gridRef.current.api.exportDataAsCsv(exportParams);
     }, []);
 
-
     return (
         <>
             <Button type="button" onClick={handleClickPopup}>
