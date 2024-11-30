@@ -36,9 +36,6 @@ export default function Customer() {
             headerName: '',
             sortable: false,
             filter: false,
-            cellStyle: {
-                'textAlign': 'left'
-            },
             maxWidth: 100,
             minWidth: 50,
             cellRenderer: params => <Button color="error" onClick={() => deleteCustomer(params.data._links.self.href)}>Delete</Button>
@@ -48,7 +45,6 @@ export default function Customer() {
             headerName: '',
             sortable: false,
             filter: false,
-            type: 'left-aligned',
             maxWidth: 100,
             minWidth: 50,
             cellRenderer: params => <UpdateCustomer updateCustomer={updateCustomer} currentCustomer={params.data} />
