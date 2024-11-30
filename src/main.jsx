@@ -12,6 +12,7 @@ import Charts from './components/Charts.jsx'
 
 const router = createHashRouter([
   {
+    basename: import.meta.env.BASE_URL,
     path: "/",
     element: <App />,
     errorElement: <Error />,
