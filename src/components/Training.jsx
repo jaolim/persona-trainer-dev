@@ -25,7 +25,7 @@ export default function Training() {
         activity: '',
         customer: '',
     })
-//ag-grid definitions
+    //ag-grid definitions
     const [columnDefs, setColumnDefs] = useState([
         {
             field: 'date',
@@ -34,7 +34,7 @@ export default function Training() {
             maxWidth: 150,
             filter: 'agDateColumnFilter',
             valueGetter: params => {
-                if (params.data.date != null){
+                if (params.data.date != null) {
                     return parseISO(params.data.date, new Date())
                 } else {
                     return ('')
@@ -59,7 +59,7 @@ export default function Training() {
         {
             field: 'customer',
             headerName: 'Customer',
-            flex:2, 
+            flex: 2,
             minWidth: 50,
             valueGetter: params => {
                 if (params.data.customer != null) {
@@ -81,7 +81,7 @@ export default function Training() {
             cellRenderer: params => <Button color="error" onClick={() => deleteTraining(params.data.id)}>Delete</Button>
         }
     ]);
-    
+
     const gridRef = useRef();
 
     const defaultColDef = {
@@ -96,7 +96,7 @@ export default function Training() {
     const [exportParams, setExportParams] = useState({
         columnKeys: ['date', 'duration', 'activity', 'customer']
     })
-// API calls
+    // API calls
     const fetchCustomers = async () => {
         try {
             const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers')
@@ -172,7 +172,7 @@ export default function Training() {
         fetchCustomers();
         fetchTrainings();
     }
-//handlers
+    //handlers
     const handleSetCustomer = (event) => {
         setCustomer(event.target.value);
     }
@@ -193,7 +193,7 @@ export default function Training() {
         addTraining()
         setOpen(false);
     }
-//useEffects
+    //useEffects
     useEffect(() => {
         setTraining({ ...training, customer })
     }, [customer])
@@ -208,78 +208,78 @@ export default function Training() {
                 <h1>Training sessions</h1>
             </div>
             <div className="content">
-            <Button onClick={handleClickOpen}>Add training</Button>
-            <ExportCsv gridRef={gridRef} exportParams={exportParams} />
-            <Dialog
-                open={open}
-                onClose={handleClose}
-            >
-                <DialogTitle>New training</DialogTitle>
-                <DialogContent>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            name="date"
-                            format="dd-MM-yyyy HH:mm"
-                            ampm={false}
-                            onChange={(date) => setDate(date)}
-                            value={date}
+                <Button onClick={handleClickOpen}>Add training</Button>
+                <ExportCsv gridRef={gridRef} exportParams={exportParams} />
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                >
+                    <DialogTitle>New training</DialogTitle>
+                    <DialogContent>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DateTimePicker
+                                name="date"
+                                format="dd-MM-yyyy HH:mm"
+                                ampm={false}
+                                onChange={(date) => setDate(date)}
+                                value={date}
+                            />
+                        </LocalizationProvider>
+                        <TextField
+                            required
+                            id="activity"
+                            name="activity"
+                            label="Activity"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange}
+                            value={training.activity}
                         />
-                    </LocalizationProvider>
-                    <TextField
-                        required
-                        id="activity"
-                        name="activity"
-                        label="Activity"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange}
-                        value={training.activity}
+                        <TextField
+                            required
+                            id="duration"
+                            name="duration"
+                            label="Duration"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange}
+                            value={training.duration}
+                        />
+                        <InputLabel id="customerLabel">Customer</InputLabel>
+                        <Select
+                            id="customer"
+                            style={{ minWidth: 150 }}
+                            value={customer}
+                            onChange={handleSetCustomer}
+                            input={<OutlinedInput />}
+                        >
+                            {customers.map((customer) => (
+                                <MenuItem
+                                    key={customer._links.self.href}
+                                    value={customer}
+                                >
+                                    {customer.lastname} {customer.firstname}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleSave}>Save</Button>
+                    </DialogActions>
+                </Dialog>
+                <div className="ag-theme-material" style={{ height: 600, width: "95%", maxWidth: 1000 }}>
+                    <AgGridReact
+                        ref={gridRef}
+                        rowData={trainings}
+                        columnDefs={columnDefs}
+                        defaultColDef={defaultColDef}
+                        autoSizeStrategy={autoSizeStrategy}
+                        accentedSort={true}
                     />
-                    <TextField
-                        required
-                        id="duration"
-                        name="duration"
-                        label="Duration"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                        onChange={handleChange}
-                        value={training.duration}
-                    />
-                    <InputLabel id="customerLabel">Customer</InputLabel>
-                    <Select
-                        id="customer"
-                        style={{ minWidth: 150 }}
-                        value={customer}
-                        onChange={handleSetCustomer}
-                        input={<OutlinedInput />}
-                    >
-                        {customers.map((customer) => (
-                            <MenuItem
-                                key={customer._links.self.href}
-                                value={customer}
-                            >
-                                {customer.lastname} {customer.firstname}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSave}>Save</Button>
-                </DialogActions>
-            </Dialog>
-            <div className="ag-theme-material" style={{ height: 600, width: "95%", maxWidth:1000 }}>
-                <AgGridReact
-                    ref={gridRef}
-                    rowData={trainings}
-                    columnDefs={columnDefs}
-                    defaultColDef={defaultColDef}
-                    autoSizeStrategy={autoSizeStrategy}
-                    accentedSort={true}
-                />
-            </div>
+                </div>
             </div>
         </>);
 }
