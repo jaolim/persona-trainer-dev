@@ -260,7 +260,7 @@ export default function Training() {
                                     key={customer._links.self.href}
                                     value={customer}
                                 >
-                                    {customer.lastname} {customer.firstname}
+                                    {customer.lastname} {customer.firstname} ({/[^/]*$/.exec(customer._links.self.href)})
                                 </MenuItem>
                             ))}
                         </Select>
